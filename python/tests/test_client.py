@@ -139,3 +139,23 @@ class ChannelsTest(unittest.TestCase):
         self.assertEqual(call["url"], "https://api.example.com/v1/sessions/sess_1/channels/120363144742733222/messages")
         self.assertIn("idempotency-key", call["headers"])
         self.assertEqual(call["body"], {"type": "text", "body": {"text": "hi"}})
+
+class PathEscapingTest(unittest.TestCase):
+    """A path value must not be able to escape its own segment.
+
+    quote()'s default safe='/' left slashes unescaped, so "../../admin" passed
+    into the path verbatim — the caller's API key attached to a rewritten
+    route. JIDs arrive from inbound messages, which makes path values
+    attacker-influenced by construction. The other three SDKs already escape
+    everything; this pins Python to the same behaviour.
+    """
+
+    def test_traversal_cannot_add_segments(self):
+        t = FakeTransport(200, {"data": {}})
+        wa = WALayer(api_key="wsk_test_x", base_url="https://api.example.com", transport=t)
+        wa.sessions.get("../../admin?x=1")
+        url = t.calls[0]["url"]
+        self.assertNotIn("/../", url)
+        self.assertNotIn("?", url.split("/v1/", 1)[1], "a path value started a query string")
+        self.assertIn("..%2F..%2Fadmin%3Fx%3D1", url)
+

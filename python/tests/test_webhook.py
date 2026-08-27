@@ -47,6 +47,14 @@ class WebhookTest(unittest.TestCase):
         r = verify_webhook(body, server_sig, ts, SECRET, now_seconds=ts + 3)
         self.assertTrue(r.valid)
 
+    def test_non_ascii_signature_is_invalid_not_an_exception(self):
+        """compare_digest on str raises TypeError for non-ASCII input, and the
+        signature header is attacker-controlled - a crafted byte must yield
+        invalid, never an exception inside the caller's handler."""
+        r = verify_webhook("{}", "v1,sha256=\u00e9bad", 1000, SECRET, now_seconds=1000)
+        self.assertFalse(r.valid)
+        self.assertEqual(r.reason, "signature")
+
 
 if __name__ == "__main__":
     unittest.main()

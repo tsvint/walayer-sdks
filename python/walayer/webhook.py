@@ -45,6 +45,10 @@ def verify_webhook(
 
     mac = hmac.new(secret.encode("utf-8"), f"{ts}.{raw_body}".encode("utf-8"), hashlib.sha256).hexdigest()
     expected = f"{prefix}{mac}"
-    if not hmac.compare_digest(signature, expected):
+    # Compare as bytes: compare_digest on str RAISES TypeError when either side
+    # carries a non-ASCII character, and the signature header is attacker
+    # input — a crafted header must come back "invalid", never as an exception
+    # thrown inside the caller's webhook handler.
+    if not hmac.compare_digest(signature.encode("utf-8"), expected.encode("utf-8")):
         return VerifyResult(False, "signature")
     return VerifyResult(True)

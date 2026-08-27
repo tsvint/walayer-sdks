@@ -2,7 +2,20 @@
 from __future__ import annotations
 
 import uuid
-from urllib.parse import quote
+from urllib.parse import quote as _quote
+
+
+def quote(value: object) -> str:
+    """Escape one path segment, fully.
+
+    urllib's quote() with its DEFAULT safe='/' does not escape slashes, so a
+    value containing "../" passed into the path verbatim and rewrote the
+    request route. The other SDKs escape everything (rawurlencode,
+    encodeURIComponent, url.PathEscape); safe="" is that behaviour here. JIDs
+    arrive from inbound messages, which makes path values attacker-influenced
+    by construction. Coerces first: some ids (channel server_id) are ints.
+    """
+    return _quote(str(value), safe="")
 from typing import Any, Dict, List, Optional
 
 from .http import Http, Transport
@@ -41,7 +54,7 @@ class Sessions:
         return self._http.request("/v1/sessions")
 
     def get(self, session_id: str) -> Dict[str, Any]:
-        return self._http.request(f"/v1/sessions/{session_id}")
+        return self._http.request(f"/v1/sessions/{quote(session_id)}")
 
     def update(self, session_id: str, **fields: Any) -> Dict[str, Any]:
         """Partial update. ``pacing`` is MERGED, not replaced (docs/04 §4.4)."""
@@ -106,7 +119,7 @@ class Messages:
         retried call never sends twice."""
         key = idempotency_key or str(uuid.uuid4())
         return self._http.request(
-            f"/v1/sessions/{session_id}/messages",
+            f"/v1/sessions/{quote(session_id)}/messages",
             method="POST",
             body=message,
             extra_headers={"idempotency-key": key},
@@ -312,13 +325,13 @@ class Channels:
     def react(self, session_id: str, channel_id: str, server_id: int, emoji: str) -> Dict[str, Any]:
         """React to a channel message by its numeric server id. Empty emoji removes."""
         return self._http.request(
-            f"/v1/sessions/{quote(session_id)}/channels/{quote(channel_id)}/messages/{server_id}/react",
+            f"/v1/sessions/{quote(session_id)}/channels/{quote(channel_id)}/messages/{quote(server_id)}/react",
             method="POST", body={"emoji": emoji},
         )
 
     def mark_viewed(self, session_id: str, channel_id: str, server_id: int) -> Dict[str, Any]:
         return self._http.request(
-            f"/v1/sessions/{quote(session_id)}/channels/{quote(channel_id)}/messages/{server_id}/view",
+            f"/v1/sessions/{quote(session_id)}/channels/{quote(channel_id)}/messages/{quote(server_id)}/view",
             method="POST",
         )
 
@@ -337,7 +350,7 @@ class Channels:
         """Send to a channel/newsletter. The channel id is the target - no `to` in the body."""
         key = idempotency_key or str(uuid.uuid4())
         return self._http.request(
-            f"/v1/sessions/{session_id}/channels/{channel_id}/messages",
+            f"/v1/sessions/{quote(session_id)}/channels/{quote(channel_id)}/messages",
             method="POST",
             body=message,
             extra_headers={"idempotency-key": key},
@@ -361,7 +374,7 @@ class Webhooks:
         return self._http.request(f"/v1/webhooks/{quote(webhook_id)}", method="PATCH", body=fields)
 
     def delete(self, webhook_id: str) -> None:
-        self._http.request(f"/v1/webhooks/{webhook_id}", method="DELETE")
+        self._http.request(f"/v1/webhooks/{quote(webhook_id)}", method="DELETE")
 
     def test(self, webhook_id: str) -> Dict[str, Any]:
         """Fire a signed test delivery at the endpoint now."""
@@ -382,7 +395,7 @@ class Suppressions:
         return self._http.request("/v1/suppressions", method="POST", body=body)
 
     def remove(self, phone: str) -> None:
-        self._http.request(f"/v1/suppressions/{phone}", method="DELETE")
+        self._http.request(f"/v1/suppressions/{quote(phone)}", method="DELETE")
 
 
 class Groups:
@@ -393,17 +406,17 @@ class Groups:
         body: Dict[str, Any] = {"subject": subject}
         if participants is not None:
             body["participants"] = participants
-        return self._http.request(f"/v1/sessions/{session_id}/groups", method="POST", body=body)
+        return self._http.request(f"/v1/sessions/{quote(session_id)}/groups", method="POST", body=body)
 
     def list(self, session_id: str) -> List[Dict[str, Any]]:
-        return self._http.request(f"/v1/sessions/{session_id}/groups")
+        return self._http.request(f"/v1/sessions/{quote(session_id)}/groups")
 
     def get(self, session_id: str, group_id: str) -> Dict[str, Any]:
-        return self._http.request(f"/v1/sessions/{session_id}/groups/{group_id}")
+        return self._http.request(f"/v1/sessions/{quote(session_id)}/groups/{quote(group_id)}")
 
     def participants(self, session_id: str, group_id: str, action: str, participants: List[str]) -> Dict[str, Any]:
         return self._http.request(
-            f"/v1/sessions/{session_id}/groups/{group_id}/participants",
+            f"/v1/sessions/{quote(session_id)}/groups/{quote(group_id)}/participants",
             method="POST",
             body={"action": action, "participants": participants},
         )
