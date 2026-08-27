@@ -32,7 +32,7 @@ arrives as a `message.status` webhook.
 $wa->sessions->list();
 $wa->sessions->create('LK', 'Sales');
 $wa->sessions->get($sessionId);
-$wa->sessions->delete($sessionId);          // logout, credential shred, proxy release
+$wa->sessions->delete($sessionId);          // logout, credential shred, unlink
 
 $wa->messages->send($sessionId, $message);  // all 22 types — see below
 $wa->messages->story($sessionId, ['type' => 'text', 'body' => ['text' => 'Live now']]);

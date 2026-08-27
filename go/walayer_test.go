@@ -301,8 +301,8 @@ func TestVerifyWebhookRejectsMalformedHeaders(t *testing.T) {
 	}
 }
 
-// The retired proxy endpoint must not come back. It was removed from the API
-// with D44/D46, and three SDKs shipped a method that called it and 404'd.
+// The retired proxy endpoint must not come back. It no longer exists on the
+// API, and three SDKs shipped a method that called it and got a 404.
 func TestNoProxyEndpointRemains(t *testing.T) {
 	rec := &recorder{}
 	client := newTest(rec)

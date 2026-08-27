@@ -135,7 +135,7 @@ class Messages {
    *
    * The idempotency key defaults to a fresh uuid, which makes a retry of THIS
    * call a new message. Pass your own — derived from whatever you are reacting
-   * to — when a retry must not send twice (invariant I4).
+   * to — when a retry must not send twice.
    */
   send(sessionId: string, input: SendInput, idempotencyKey: string = randomUUID()): Promise<SendResult> {
     return this.http.request(`/v1/sessions/${enc(sessionId)}/messages`, {

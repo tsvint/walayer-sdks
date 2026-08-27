@@ -6,7 +6,7 @@ namespace WALayer\Resource;
 
 use WALayer\Idempotency;
 
-/** The unified send route plus message reads (docs/04-api-spec.md §5–§7). */
+/** The unified send route plus message reads. */
 final class Messages extends AbstractResource
 {
     /**
@@ -15,7 +15,7 @@ final class Messages extends AbstractResource
      * accepts any of the 17 types in {@see \WALayer\MessageType}.
      *
      * An `Idempotency-Key` is generated when you omit one, so a retried call
-     * never sends the same WhatsApp message twice (invariant I4). Pass your own
+     * never sends the same WhatsApp message twice. Pass your own
      * when you want to control it — and reuse the *same* key when retrying a
      * request whose outcome you did not see.
      *

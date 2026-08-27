@@ -85,7 +85,7 @@ This SDK covers what you can do with a linked WhatsApp number:
 
 | Namespace | What it does |
 |---|---|
-| `sessions` | link, update pacing, health, settings, limits, pair, rotate proxy, logout, delete |
+| `sessions` | link, update pacing, health, settings, limits, pair, logout, delete |
 | `messages` | send (all 22 types), bulk campaigns, stories, the log (paged), receipts, resend, star / pin / read / played |
 | `inbox` | chats, history, mark read, get / delete / archive / pin / mute / disappearing, chat presence |
 | `contacts` | on-WhatsApp check, LID↔phone resolve, block / unblock, blocklist, about, profile, presence + subscribe, own profile & presence |

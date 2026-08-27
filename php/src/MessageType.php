@@ -6,7 +6,7 @@ namespace WALayer;
 
 /**
  * The 17 message types the unified send route accepts
- * (docs/04-api-spec.md §5.2). Constants rather than an enum so a caller can
+ *. Constants rather than an enum so a caller can
  * still pass a type this SDK release has not heard of — the server, not the
  * client, is the authority on what is sendable.
  *

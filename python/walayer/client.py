@@ -48,7 +48,7 @@ class Sessions:
         return self._http.request(f"/v1/sessions/{quote(session_id)}", method="PATCH", body=fields)
 
     def delete(self, session_id: str) -> None:
-        """Graceful logout, credential shred, proxy release."""
+        """Graceful logout and credential shred. The number is unlinked."""
         return self._http.request(f"/v1/sessions/{quote(session_id)}", method="DELETE")
 
     def logout(self, session_id: str) -> Dict[str, Any]:
@@ -103,7 +103,7 @@ class Messages:
 
     def send(self, session_id: str, message: Dict[str, Any], idempotency_key: Optional[str] = None) -> Dict[str, Any]:
         """Send a message. An Idempotency-Key is generated when omitted, so a
-        retried call never sends twice (invariant I4)."""
+        retried call never sends twice."""
         key = idempotency_key or str(uuid.uuid4())
         return self._http.request(
             f"/v1/sessions/{session_id}/messages",

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace WALayer\Resource;
 
-/** Sessions — one linked WhatsApp number each (docs/04-api-spec.md §3.1). */
+/** Sessions — one linked WhatsApp number each. */
 final class Sessions extends AbstractResource
 {
     /** @return list<array<string,mixed>> */
@@ -22,8 +22,8 @@ final class Sessions extends AbstractResource
     }
 
     /**
-     * Create a session. A proxy is allocated at creation; if none is available
-     * the API refuses rather than falling back to shared egress (invariant I3).
+     * Create a session. `country` is metadata used for warmup pacing and
+     * reporting; it does not allocate any infrastructure.
      *
      * @return array<string,mixed>
      */
@@ -38,7 +38,7 @@ final class Sessions extends AbstractResource
         return $this->http->request('/v1/sessions', 'POST', $body);
     }
 
-    /** Delete: graceful logout, credential shred, proxy release. */
+    /** Delete: graceful logout and credential shred. The number is unlinked. */
     public function delete(string $sessionId): void
     {
         $this->http->request('/v1/sessions/' . $this->seg($sessionId), 'DELETE');
@@ -113,7 +113,5 @@ final class Sessions extends AbstractResource
     {
         return $this->http->request('/v1/sessions/' . $this->seg($id) . '/pair', 'POST', $opts);
     }
-
-    /** Rotate the pinned egress proxy. @return array<string,mixed> */
 
 }

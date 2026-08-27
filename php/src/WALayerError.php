@@ -9,7 +9,7 @@ use RuntimeException;
 
 /**
  * Thrown for any non-2xx API response, carrying the WALayer error code
- * (docs/04-api-spec.md §10) rather than a stringified response body.
+ * rather than a stringified response body.
  *
  * Callers branch on the code, never on the message text:
  *

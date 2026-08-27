@@ -8,7 +8,7 @@ namespace WALayer;
  * Idempotency-Key generation.
  *
  * The key becomes `client_msg_id` with `UNIQUE (tenant_id, client_msg_id)`
- * server-side (invariant I4): a replayed request returns the original message
+ * server-side: a replayed request returns the original message
  * instead of sending a second real WhatsApp message to a real person. So the
  * key must be unpredictable and unique — this uses the CSPRNG, not `uniqid()`.
  */

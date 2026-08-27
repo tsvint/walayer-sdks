@@ -7,7 +7,7 @@ namespace WALayer;
 /**
  * Webhook signature verification.
  *
- * Matches the server scheme (docs/04-api-spec.md §8.3): the request carries
+ * Matches the server scheme: the request carries
  * `X-Signature: v1,sha256=<hex>` and `X-Timestamp: <unix seconds>`, where
  * hex = HMAC-SHA256(secret, "{timestamp}.{rawBody}").
  *
