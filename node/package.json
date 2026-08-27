@@ -15,7 +15,7 @@
     "build": "tsc -p tsconfig.build.json",
     "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test \"src/**/*.test.ts\""
+    "test": "node --import tsx --test src/client.test.ts src/webhook.test.ts"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
