@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "walayer"
+version = "0.1.0"
+description = "Official Python client for the WALayer WhatsApp API"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "WALayer" }]
+dependencies = []                 # zero runtime deps — stdlib only
+
+[project.urls]
+Homepage = "https://walayer.com"
+Repository = "https://github.com/tsvint/walayer-sdks"
+Documentation = "https://walayer.com/docs"
+
+[tool.setuptools.packages.find]
+include = ["walayer*"]

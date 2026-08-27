@@ -1,0 +1,51 @@
+{
+  "name": "walayer/walayer-php",
+  "description": "Official PHP client for the WALayer WhatsApp API. Zero runtime dependencies.",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://walayer.com",
+  "keywords": [
+    "walayer",
+    "whatsapp",
+    "api",
+    "sdk",
+    "messaging"
+  ],
+  "require": {
+    "php": ">=8.1",
+    "ext-json": "*"
+  },
+  "suggest": {
+    "ext-curl": "Preferred HTTP backend; the SDK falls back to PHP streams when it is absent."
+  },
+  "autoload": {
+    "psr-4": {
+      "WALayer\\": "src/"
+    },
+    "files": [
+      "src/functions.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WALayer\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "php tests/run.php"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "authors": [
+    {
+      "name": "Applyform LLC",
+      "homepage": "https://walayer.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/tsvint/walayer-sdks/issues",
+    "source": "https://github.com/tsvint/walayer-sdks",
+    "docs": "https://walayer.com/docs"
+  }
+}
